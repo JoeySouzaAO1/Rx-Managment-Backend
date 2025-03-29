@@ -1,5 +1,5 @@
-/*
-package com.surecostproject.takehome.entity;
+/* Original code before refactoring
+
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -75,7 +75,11 @@ public class Drug {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-} 
+}
+*/
+
+/* chatGPT refactored code after initial implementation, 
+it reccomended Lombok annotations to reduce boilerplate code */
 
 package com.surecostproject.takehome.entity;
 
@@ -93,7 +97,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Drug {
-*/
 
     @Id
     @GeneratedValue(generator = "UUID")

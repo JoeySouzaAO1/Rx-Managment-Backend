@@ -22,4 +22,4 @@ public interface DrugRepository extends JpaRepository<Drug, UUID> {
     List<Drug> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
     
     List<Drug> findByQuantityGreaterThan(int minQuantity);
-}
+} 
