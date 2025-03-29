@@ -17,8 +17,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class DrugService {
+    private static final int ASYNC_THRESHOLD = 100; // Process async if more than 100 items
     
     private final DrugRepository drugRepository;
+    private final AsyncDrugProcessor asyncProcessor;
 
     @Transactional(readOnly = true)
     public List<Drug> getAllDrugs() {
@@ -39,18 +41,10 @@ public class DrugService {
 
     @Transactional
     public List<Drug> createBulkDrugs(List<Drug> drugs) {
-        List<String> errors = new ArrayList<>();
+        validateBulkDrugs(drugs);
         
-        for (int i = 0; i < drugs.size(); i++) {
-            try {
-                validateDrug(drugs.get(i));
-            } catch (InvalidDrugRequestException e) {
-                errors.add(String.format("Drug at index %d: %s", i, e.getMessage()));
-            }
-        }
-        
-        if (!errors.isEmpty()) {
-            throw new BulkProcessingException("Bulk creation failed", errors);
+        if (drugs.size() > ASYNC_THRESHOLD) {
+            return asyncProcessor.processBulkCreation(drugs);
         }
         
         return drugRepository.saveAll(drugs);
@@ -71,24 +65,10 @@ public class DrugService {
 
     @Transactional
     public List<Drug> updateBulkDrugs(List<Drug> drugs) {
-        List<String> errors = new ArrayList<>();
+        validateBulkDrugsForUpdate(drugs);
         
-        for (int i = 0; i < drugs.size(); i++) {
-            Drug drug = drugs.get(i);
-            try {
-                validateDrug(drug);
-                if (drug.getUid() == null) {
-                    errors.add(String.format("Drug at index %d: ID is required for bulk update", i));
-                } else if (!drugRepository.existsById(drug.getUid())) {
-                    errors.add(String.format("Drug at index %d: Drug not found with id: %s", i, drug.getUid()));
-                }
-            } catch (InvalidDrugRequestException e) {
-                errors.add(String.format("Drug at index %d: %s", i, e.getMessage()));
-            }
-        }
-        
-        if (!errors.isEmpty()) {
-            throw new BulkProcessingException("Bulk update failed", errors);
+        if (drugs.size() > ASYNC_THRESHOLD) {
+            return asyncProcessor.processBulkUpdate(drugs);
         }
         
         return drugRepository.saveAll(drugs);
@@ -104,19 +84,13 @@ public class DrugService {
 
     @Transactional
     public void deleteBulkDrugs(List<UUID> ids) {
-        List<String> errors = new ArrayList<>();
+        validateBulkDrugsForDeletion(ids);
         
-        for (UUID id : ids) {
-            if (!drugRepository.existsById(id)) {
-                errors.add("Drug not found with id: " + id);
-            }
+        if (ids.size() > ASYNC_THRESHOLD) {
+            asyncProcessor.processBulkDeletion(ids);
+        } else {
+            drugRepository.deleteAllById(ids);
         }
-        
-        if (!errors.isEmpty()) {
-            throw new BulkProcessingException("Bulk deletion failed", errors);
-        }
-        
-        drugRepository.deleteAllById(ids);
     }
 
     // Search methods
@@ -147,6 +121,52 @@ public class DrugService {
         }
         if (drug.getPrice() == null || drug.getPrice().compareTo(BigDecimal.ZERO) < 0) {
             throw new InvalidDrugRequestException("Price cannot be negative");
+        }
+    }
+
+    private void validateBulkDrugs(List<Drug> drugs) {
+        List<String> errors = new ArrayList<>();
+        for (int i = 0; i < drugs.size(); i++) {
+            try {
+                validateDrug(drugs.get(i));
+            } catch (InvalidDrugRequestException e) {
+                errors.add(String.format("Drug at index %d: %s", i, e.getMessage()));
+            }
+        }
+        if (!errors.isEmpty()) {
+            throw new BulkProcessingException("Bulk validation failed", errors);
+        }
+    }
+
+    private void validateBulkDrugsForUpdate(List<Drug> drugs) {
+        List<String> errors = new ArrayList<>();
+        for (int i = 0; i < drugs.size(); i++) {
+            Drug drug = drugs.get(i);
+            try {
+                validateDrug(drug);
+                if (drug.getUid() == null) {
+                    errors.add(String.format("Drug at index %d: ID is required for bulk update", i));
+                } else if (!drugRepository.existsById(drug.getUid())) {
+                    errors.add(String.format("Drug at index %d: Drug not found with id: %s", i, drug.getUid()));
+                }
+            } catch (InvalidDrugRequestException e) {
+                errors.add(String.format("Drug at index %d: %s", i, e.getMessage()));
+            }
+        }
+        if (!errors.isEmpty()) {
+            throw new BulkProcessingException("Bulk update validation failed", errors);
+        }
+    }
+
+    private void validateBulkDrugsForDeletion(List<UUID> ids) {
+        List<String> errors = new ArrayList<>();
+        for (UUID id : ids) {
+            if (!drugRepository.existsById(id)) {
+                errors.add("Drug not found with id: " + id);
+            }
+        }
+        if (!errors.isEmpty()) {
+            throw new BulkProcessingException("Bulk deletion validation failed", errors);
         }
     }
 } 
