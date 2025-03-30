@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -44,9 +45,12 @@ public class DrugService {
         validateBulkDrugs(drugs);
         
         if (drugs.size() > ASYNC_THRESHOLD) {
-            return asyncProcessor.processBulkCreation(drugs);
+            try {
+                return asyncProcessor.processBulkCreation(drugs).get();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException("Error processing bulk creation", e);
+            }
         }
-        
         return drugRepository.saveAll(drugs);
     }
 

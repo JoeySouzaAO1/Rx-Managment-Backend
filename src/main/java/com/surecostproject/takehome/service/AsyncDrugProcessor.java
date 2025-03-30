@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -20,18 +21,20 @@ public class AsyncDrugProcessor {
     
     @Async("drugProcessingExecutor")
     @Transactional
-    public List<Drug> processBulkCreation(List<Drug> drugs) {
-        List<Drug> processedDrugs = new ArrayList<>();
-        
-        // Process in chunks
-        for (int i = 0; i < drugs.size(); i += CHUNK_SIZE) {
-            int endIndex = Math.min(i + CHUNK_SIZE, drugs.size());
-            List<Drug> chunk = drugs.subList(i, endIndex);
-            List<Drug> savedChunk = drugRepository.saveAll(chunk);
-            processedDrugs.addAll(savedChunk);
-        }
-        
-        return processedDrugs;
+    public CompletableFuture<List<Drug>> processBulkCreation(List<Drug> drugs) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Drug> processedDrugs = new ArrayList<>();
+            
+            // Process in chunks
+            for (int i = 0; i < drugs.size(); i += CHUNK_SIZE) {
+                int endIndex = Math.min(i + CHUNK_SIZE, drugs.size());
+                List<Drug> chunk = drugs.subList(i, endIndex);
+                List<Drug> savedChunk = drugRepository.saveAll(chunk);
+                processedDrugs.addAll(savedChunk);
+            }
+            
+            return processedDrugs;
+        });
     }
     
     @Async("drugProcessingExecutor")
