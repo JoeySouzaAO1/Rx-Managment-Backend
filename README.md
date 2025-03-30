@@ -149,5 +149,12 @@ The `DrugControllerTest` class contains fully functional unit tests for core CRU
 - `deleteDrug_Success()`: Ensures proper drug deletion
 - `updateDrug_Success()`: Verifies drug update functionality
 
+The `DrugIntegrationTest` class demonstrates end-to-end testing with a running application context:
+- `createAndRetrieveDrug_Success()`: Tests the complete flow of creating and retrieving a drug
+  - Validates HTTP responses
+  - Verifies database persistence
+  - Confirms JSON serialization/deserialization
+  - Tests API endpoint integration
+
 ### Planned Test Coverage
 To demonstrate comprehensive test planning, additional test methods are stubbed out to show what would be implemented with more time:
