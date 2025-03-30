@@ -12,6 +12,26 @@ A Java-powered REST API service built on Spring Boot, designed for comprehensive
 - Maven
 - SpringDoc OpenAPI UI 2.3.0
 
+
+## Database Configuration
+
+This project uses H2 in-memory database for several key reasons:
+- **Zero Configuration**: No external database setup required
+- **Instant Startup**: In-memory operation provides immediate availability
+- **Portability**: Runs anywhere with Java, no additional installations needed
+- **Testing**: Ideal for demonstrating functionality and running test cases
+
+The application uses Spring Data JPA/Hibernate for database operations, making it production-ready and database-agnostic. Switching to a different database (MySQL, PostgreSQL, etc.) requires only:
+1. Adding the appropriate database dependency
+2. Updating application properties with connection details
+3. No code changes needed due to JPA abstraction
+
+### H2 Console Access
+The H2 console is available at: `http://localhost:8080/h2-console`
+- JDBC URL: `jdbc:h2:mem:testdb`
+- Username: `sa`
+- Password: ` ` (empty)
+
 ## Prerequisites
 
 - Java JDK 21
@@ -92,4 +112,3 @@ Drugs are represented using the following structure:
     "price": "decimal"
 }
 ```
-
