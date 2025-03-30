@@ -88,7 +88,12 @@ This project uses OpenAPI 3.0 (Swagger) for API documentation. After starting th
 All endpoints are prefixed with `/api/drugs`
 
 #### Basic CRUD Operations
-- `GET /` - Retrieve all drugs in the system
+- `GET /` - Retrieve all drugs in the system (paginated)
+  - Query Parameters:
+    - `page`: Page number (0-based, default: 0)
+    - `size`: Items per page (default: 20)
+    - `sortBy`: Field to sort by (default: name)
+    - `direction`: Sort direction (asc/desc, default: asc)
 - `GET /{id}` - Retrieve a specific drug by its UUID
 - `POST /` - Create a new drug entry
   - Requires drug details in request body
@@ -97,6 +102,10 @@ All endpoints are prefixed with `/api/drugs`
 - `DELETE /{id}` - Delete a drug by its UUID
 
 #### Search Operations
+All search endpoints support pagination with the following query parameters:
+- `page`: Page number (0-based, default: 0)
+- `size`: Items per page (default: 20)
+
 - `GET /search/name?name={drugName}` - Search drugs by name (case-insensitive)
 - `GET /search/manufacturer?manufacturer={manufacturerName}` - Search drugs by manufacturer name (case-insensitive)
 - `GET /search/price-range?minPrice={minPrice}&maxPrice={maxPrice}` - Search drugs within a specific price range
@@ -110,5 +119,21 @@ Drugs are represented using the following structure:
     "manufacturerName": "string",
     "quantity": "integer",
     "price": "decimal"
+}
+```
+
+### Response Format
+Paginated responses include:
+```json
+{
+    "content": [
+        // Array of drug items
+    ],
+    "totalElements": 100,    // Total number of items
+    "totalPages": 5,         // Total number of pages
+    "number": 0,             // Current page number
+    "size": 20,             // Items per page
+    "first": true,          // Is this the first page?
+    "last": false           // Is this the last page?
 }
 ```

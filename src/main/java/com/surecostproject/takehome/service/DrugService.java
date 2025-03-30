@@ -6,6 +6,8 @@ import com.surecostproject.takehome.exception.DrugNotFoundException;
 import com.surecostproject.takehome.exception.InvalidDrugRequestException;
 import com.surecostproject.takehome.repository.DrugRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,20 +99,25 @@ public class DrugService {
         }
     }
 
-    // Search methods
+    // Search methods with pagination
     @Transactional(readOnly = true)
-    public List<Drug> searchByName(String name) {
-        return drugRepository.findByNameContainingIgnoreCase(name);
+    public Page<Drug> searchByName(String name, Pageable pageable) {
+        return drugRepository.findByNameContainingIgnoreCase(name, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Drug> searchByManufacturer(String manufacturerName) {
-        return drugRepository.findByManufacturerNameContainingIgnoreCase(manufacturerName);
+    public Page<Drug> searchByManufacturer(String manufacturerName, Pageable pageable) {
+        return drugRepository.findByManufacturerNameContainingIgnoreCase(manufacturerName, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Drug> searchByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
-        return drugRepository.findByPriceBetween(minPrice, maxPrice);
+    public Page<Drug> searchByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable) {
+        return drugRepository.findByPriceBetween(minPrice, maxPrice, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Drug> getAllDrugs(Pageable pageable) {
+        return drugRepository.findAll(pageable);
     }
 
     private void validateDrug(Drug drug) {

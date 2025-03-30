@@ -1,25 +1,26 @@
 package com.surecostproject.takehome.repository;
 
 import com.surecostproject.takehome.entity.Drug;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface DrugRepository extends JpaRepository<Drug, UUID> {
-    // Custom query methods for search functionality
-    List<Drug> findByNameContainingIgnoreCase(String name);
+    // Custom query methods for search functionality with pagination
+    Page<Drug> findByNameContainingIgnoreCase(String name, Pageable pageable);
     
-    List<Drug> findByManufacturerNameContainingIgnoreCase(String manufacturerName);
+    Page<Drug> findByManufacturerNameContainingIgnoreCase(String manufacturerName, Pageable pageable);
     
-    List<Drug> findByPriceLessThanEqual(BigDecimal maxPrice);
+    Page<Drug> findByPriceLessThanEqual(BigDecimal maxPrice, Pageable pageable);
     
-    List<Drug> findByPriceGreaterThanEqual(BigDecimal minPrice);
+    Page<Drug> findByPriceGreaterThanEqual(BigDecimal minPrice, Pageable pageable);
     
-    List<Drug> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
+    Page<Drug> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable);
     
-    List<Drug> findByQuantityGreaterThan(int minQuantity);
+    Page<Drug> findByQuantityGreaterThan(int minQuantity, Pageable pageable);
 } 

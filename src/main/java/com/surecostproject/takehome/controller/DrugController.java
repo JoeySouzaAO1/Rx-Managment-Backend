@@ -6,9 +6,14 @@ import com.surecostproject.takehome.entity.Drug;
 import com.surecostproject.takehome.mapper.DrugMapper;
 import com.surecostproject.takehome.service.DrugService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +32,16 @@ public class DrugController {
     private final DrugMapper drugMapper;
 
     @GetMapping
-    @Operation(summary = "Get all drugs")
-    public ResponseEntity<List<DrugDTO>> getAllDrugs() {
-        List<Drug> drugs = drugService.getAllDrugs();
-        return ResponseEntity.ok(drugMapper.toDTOList(drugs));
+    @Operation(summary = "Get all drugs with pagination")
+    public ResponseEntity<Page<DrugDTO>> getAllDrugs(
+            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Number of items per page") @RequestParam(defaultValue = "20") int size,
+            @Parameter(description = "Sort field") @RequestParam(defaultValue = "name") String sortBy,
+            @Parameter(description = "Sort direction (asc/desc)") @RequestParam(defaultValue = "asc") String direction) {
+        Sort.Direction sortDirection = Sort.Direction.fromString(direction.toUpperCase());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        Page<Drug> drugs = drugService.getAllDrugs(pageable);
+        return ResponseEntity.ok(drugs.map(drugMapper::toDTO));
     }
 
     @GetMapping("/{id}")
@@ -87,25 +98,36 @@ public class DrugController {
     }
 
     @GetMapping("/search/name")
-    @Operation(summary = "Search drugs by name")
-    public ResponseEntity<List<DrugDTO>> searchByName(@RequestParam String name) {
-        List<Drug> drugs = drugService.searchByName(name);
-        return ResponseEntity.ok(drugMapper.toDTOList(drugs));
+    @Operation(summary = "Search drugs by name with pagination")
+    public ResponseEntity<Page<DrugDTO>> searchByName(
+            @Parameter(description = "Drug name to search for") @RequestParam String name,
+            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Number of items per page") @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Drug> drugs = drugService.searchByName(name, pageable);
+        return ResponseEntity.ok(drugs.map(drugMapper::toDTO));
     }
 
     @GetMapping("/search/manufacturer")
-    @Operation(summary = "Search drugs by manufacturer")
-    public ResponseEntity<List<DrugDTO>> searchByManufacturer(@RequestParam String manufacturer) {
-        List<Drug> drugs = drugService.searchByManufacturer(manufacturer);
-        return ResponseEntity.ok(drugMapper.toDTOList(drugs));
+    @Operation(summary = "Search drugs by manufacturer with pagination")
+    public ResponseEntity<Page<DrugDTO>> searchByManufacturer(
+            @Parameter(description = "Manufacturer name to search for") @RequestParam String manufacturer,
+            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Number of items per page") @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Drug> drugs = drugService.searchByManufacturer(manufacturer, pageable);
+        return ResponseEntity.ok(drugs.map(drugMapper::toDTO));
     }
 
     @GetMapping("/search/price-range")
-    @Operation(summary = "Search drugs by price range")
-    public ResponseEntity<List<DrugDTO>> searchByPriceRange(
-            @RequestParam BigDecimal minPrice,
-            @RequestParam BigDecimal maxPrice) {
-        List<Drug> drugs = drugService.searchByPriceRange(minPrice, maxPrice);
-        return ResponseEntity.ok(drugMapper.toDTOList(drugs));
+    @Operation(summary = "Search drugs by price range with pagination")
+    public ResponseEntity<Page<DrugDTO>> searchByPriceRange(
+            @Parameter(description = "Minimum price") @RequestParam BigDecimal minPrice,
+            @Parameter(description = "Maximum price") @RequestParam BigDecimal maxPrice,
+            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Number of items per page") @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Drug> drugs = drugService.searchByPriceRange(minPrice, maxPrice, pageable);
+        return ResponseEntity.ok(drugs.map(drugMapper::toDTO));
     }
 } 
