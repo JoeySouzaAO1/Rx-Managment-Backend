@@ -11,6 +11,7 @@ A Java-powered REST API service built on Spring Boot, designed for comprehensive
 - Lombok
 - Maven
 - SpringDoc OpenAPI UI 2.3.0
+- JUnit 5 & Mockito
 
 
 ## Database Configuration
@@ -137,3 +138,16 @@ Paginated responses include:
     "last": false           // Is this the last page?
 }
 ```
+## Testing Strategy
+
+The project includes a comprehensive testing approach, demonstrating both implemented tests and planned test coverage through method stubs.
+
+### Implemented Tests
+The `DrugControllerTest` class contains fully functional unit tests for core CRUD operations:
+- `createDrug_Success()`: Validates successful drug creation workflow
+- `getAllDrugs_Success()`: Tests paginated drug retrieval
+- `deleteDrug_Success()`: Ensures proper drug deletion
+- `updateDrug_Success()`: Verifies drug update functionality
+
+### Planned Test Coverage
+To demonstrate comprehensive test planning, additional test methods are stubbed out to show what would be implemented with more time:
