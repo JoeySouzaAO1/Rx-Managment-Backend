@@ -129,4 +129,36 @@ class DrugControllerTest {
         verify(drugMapper).toEntity(testDrugDTO);
         verify(drugMapper).toDTO(testDrug);
     }
+
+
+    @Test
+    void createDrug_WithInvalidData_ShouldReturnBadRequest() {
+        // TODO: Implement test for invalid drug creation
+    }
+
+    @Test
+    void createDrug_WithNullPrice_ShouldReturnBadRequest() {
+        // TODO: Implement validation test
+    }
+
+    @Test
+    void searchByName_ShouldReturnMatchingDrugs() {
+        // TODO: Implement search functionality test
+    }
+
+    @Test
+    void searchByManufacturer_ShouldReturnMatchingDrugs() {
+        // TODO: Implement manufacturer search test
+    }
+
+    @Test
+    void getAllDrugs_WithInvalidPagination_ShouldReturnBadRequest() {
+        // TODO: Implement pagination validation test
+    }
+
+    @Test
+    void updateDrug_WithNonexistentId_ShouldReturnNotFound() {
+        // TODO: Implement not found scenario test
+    }
+
 } 
