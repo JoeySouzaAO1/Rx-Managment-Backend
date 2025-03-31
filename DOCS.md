@@ -1,4 +1,3 @@
-```markdown
 # SureCost Drug Management Service Documentation
 
 ## Table of Contents
@@ -11,7 +10,6 @@
 - [Future Enhancements](#future-enhancements)
 - [AI Tool Usage](#ai-tool-usage)
 - [Data Handling Approach](#data-handling-approach)
-```
 
 ## Project Overview
 The SureCost Drug Management Service is a Java-based REST API designed for managing drug information. It supports CRUD operations, bulk data processing, and advanced search capabilities while ensuring scalability and efficient data handling.
