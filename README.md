@@ -56,7 +56,7 @@ This project uses H2 in-memory database for quick setup and testing:
 The H2 console is available at: `http://localhost:8080/h2-console`
 - JDBC URL: `jdbc:h2:mem:testdb`
 - Username: `sa`
-- Password: ` ` (empty)
+- Password: `` (empty)
 
 ## Quick Start Guide
 
