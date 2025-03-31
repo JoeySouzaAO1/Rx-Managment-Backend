@@ -9,7 +9,6 @@
 - [Testing Strategy](#testing-strategy)
 - [Future Enhancements](#future-enhancements)
 - [AI Tool Usage](#ai-tool-usage)
-- [Data Handling Approach](#data-handling-approach)
 
 ## Project Overview
 The SureCost Drug Management Service is a Java-based REST API designed for managing drug information. It supports CRUD operations, bulk data processing, and advanced search capabilities while ensuring scalability and efficient data handling.
@@ -205,18 +204,3 @@ For DELETE /bulk:
 ### Challenges Encountered
 - File rearrangements during Swagger integration disrupted functionality but were resolved through iterative updates with AI tools
 - Initial dependency conflicts required manual intervention before AI recommendations proved effective
-
-## Data Handling Approach
-
-### Bulk Data Processing
-- Optimized for midnight UTC data loads with efficient validation and persistence mechanisms
-
-### Search Queries
-- Designed for scalability with database indexing strategies (to be documented separately)
-
-### Validation Rules
-- Names cannot be null/empty
-- Quantity and price must be non-negative values
-
-### Response Behavior
-- Empty search results return empty lists instead of null values
