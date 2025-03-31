@@ -97,22 +97,24 @@ All endpoints are prefixed with `/api/drugs`
     - `direction`: Sort direction (asc/desc, default: asc)
 - `GET /{id}` - Retrieve a specific drug by its UUID
 - `POST /` - Create a new drug entry
-  - Requires drug details in request body
 - `PUT /{id}` - Update an existing drug by its UUID
-  - Requires updated drug details in request body
 - `DELETE /{id}` - Delete a drug by its UUID
 
+#### Bulk Operations
+- `POST /bulk` - Create multiple drugs in a single request
+- `PUT /bulk` - Update multiple drugs in a single request
+- `DELETE /bulk` - Delete multiple drugs by their UUIDs
+
 #### Search Operations
-All search endpoints support pagination with the following query parameters:
-- `page`: Page number (0-based, default: 0)
-- `size`: Items per page (default: 20)
+All search endpoints support pagination with the same query parameters as above.
 
 - `GET /search/name?name={drugName}` - Search drugs by name (case-insensitive)
 - `GET /search/manufacturer?manufacturer={manufacturerName}` - Search drugs by manufacturer name (case-insensitive)
 - `GET /search/price-range?minPrice={minPrice}&maxPrice={maxPrice}` - Search drugs within a specific price range
 
 ### Request/Response Format
-Drugs are represented using the following structure:
+
+#### Single Drug Format
 ```json
 {
     "uid": "UUID",
@@ -123,21 +125,44 @@ Drugs are represented using the following structure:
 }
 ```
 
-### Response Format
-Paginated responses include:
+#### Bulk Request Format
+For POST /bulk and PUT /bulk:
+```json
+{
+    "drugs": [
+        {
+            "uid": "UUID",
+            "name": "string",
+            "manufacturerName": "string",
+            "quantity": "integer",
+            "price": "decimal"
+        }
+    ]
+}
+```
+
+For DELETE /bulk:
+```json
+{
+    "ids": ["UUID1", "UUID2", "UUID3"]
+}
+```
+
+#### Paginated Response Format
 ```json
 {
     "content": [
         // Array of drug items
-    ],
-    "totalElements": 100,    // Total number of items
-    "totalPages": 5,         // Total number of pages
-    "number": 0,             // Current page number
-    "size": 20,             // Items per page
-    "first": true,          // Is this the first page?
-    "last": false           // Is this the last page?
+        ],
+    "totalElements": 100,
+    "totalPages": 5,
+    "number": 0,
+    "size": 20,
+    "first": true,
+    "last": false
 }
 ```
+
 ## Testing Strategy
 
 The project includes a comprehensive testing approach, demonstrating both implemented tests and planned test coverage through method stubs.
@@ -158,3 +183,18 @@ The `DrugIntegrationTest` class demonstrates end-to-end testing with a running a
 
 ### Planned Test Coverage
 To demonstrate comprehensive test planning, additional test methods are stubbed out to show what would be implemented with more time:
+
+#### Controller Tests
+- `createDrug_WithInvalidData_ShouldReturnBadRequest()`: Validates API behavior with invalid drug data
+- `createDrug_WithNullPrice_ShouldReturnBadRequest()`: Tests price validation requirements
+- `searchByName_ShouldReturnMatchingDrugs()`: Verifies name search functionality
+- `searchByManufacturer_ShouldReturnMatchingDrugs()`: Tests manufacturer search capability
+- `getAllDrugs_WithInvalidPagination_ShouldReturnBadRequest()`: Validates pagination parameter handling
+- `updateDrug_WithNonexistentId_ShouldReturnNotFound()`: Tests error handling for non-existent drugs
+
+#### Integration Tests
+- `testBulkDrugCreation_Success()`: Tests creating multiple drugs in a single request and verifies retrieval
+- `testSearchDrugs_WithFilters()`: Tests search functionality with combinations of name, manufacturer, price range, and quantity filters
+- `testPaginationAndSorting()`: Validates pagination with different page sizes and sorting by different fields
+- `testDeleteDrug_WithRelatedData()`: Verifies proper cleanup of related data during deletion
+- `testErrorScenarios()`: Tests various error scenarios including invalid data, non-existent drug retrieval, and database constraints

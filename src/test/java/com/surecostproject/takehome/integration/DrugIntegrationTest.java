@@ -66,7 +66,7 @@ class DrugIntegrationTest {
     }
 
     /*
-    Additional Integration Tests that could be implemented with more time:
+    Additional Integration Tests that could be implemented with more time: */
 
     @Test
     void testBulkDrugCreation_Success() {
@@ -91,12 +91,6 @@ class DrugIntegrationTest {
     }
 
     @Test
-    void testUpdateDrug_WithConcurrentModification() {
-        // Test update operation with concurrent modifications
-        // Verify proper transaction handling
-    }
-
-    @Test
     void testDeleteDrug_WithRelatedData() {
         // Test deletion of drugs
         // Verify proper cleanup of related data
@@ -109,5 +103,4 @@ class DrugIntegrationTest {
         // - Non-existent drug retrieval
         // - Database constraint violations
     }
-    */
 } 
