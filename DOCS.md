@@ -2,6 +2,7 @@
 
 ## Table of Contents
 - [Project Overview](#project-overview)
+- [Project Planning and Brainstorming](#project-planning-and-brainstorming)
 - [Key Features](#key-features)
 - [Assumptions and Constraints](#assumptions-and-constraints)
 - [Design Decisions](#design-decisions)
@@ -12,6 +13,31 @@
 
 ## Project Overview
 The SureCost Drug Management Service is a Java-based REST API designed for managing drug information. It supports CRUD operations, bulk data processing, and advanced search capabilities while ensuring scalability and efficient data handling.
+
+## Project Planning and Brainstorming
+The initial planning phase of the SureCost Drug Management Service utilized collaborative tools to establish a clear project direction and maintain organized documentation.
+
+### Mural Collaboration
+- **To-Do List Creation**: Developed a comprehensive task breakdown using Mural's digital whiteboard
+  - Prioritized features based on core functionality requirements
+  - Created sprint-based task groupings
+  - Established dependencies between different components
+  
+- **Mind Mapping**: Generated a detailed mind map to visualize:
+  - Core service components
+  - Data flow relationships
+  - Integration points
+  - Potential scalability challenges
+  - Future enhancement possibilities
+
+### Notion Documentation
+- **Structured Documentation**: Maintained living documentation throughout development
+  - Technical specifications
+  - API endpoint planning
+  - Database schema evolution
+  - Meeting notes and decisions
+  - Progress tracking
+  - Resource links and references
 
 ## Key Features
 - **CRUD Operations**: Create, retrieve, update, and delete drug information
