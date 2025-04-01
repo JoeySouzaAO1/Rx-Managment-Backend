@@ -15,15 +15,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
 public class DrugService {
-    private static final int ASYNC_THRESHOLD = 100; // Process async if more than 100 items
-    
     private final DrugRepository drugRepository;
-    private final AsyncDrugProcessor asyncProcessor;
 
     @Transactional(readOnly = true)
     public List<Drug> getAllDrugs() {
@@ -45,14 +41,6 @@ public class DrugService {
     @Transactional
     public List<Drug> createBulkDrugs(List<Drug> drugs) {
         validateBulkDrugs(drugs);
-        
-        if (drugs.size() > ASYNC_THRESHOLD) {
-            try {
-                return asyncProcessor.processBulkCreation(drugs).get();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException("Error processing bulk creation", e);
-            }
-        }
         return drugRepository.saveAll(drugs);
     }
 
@@ -72,11 +60,6 @@ public class DrugService {
     @Transactional
     public List<Drug> updateBulkDrugs(List<Drug> drugs) {
         validateBulkDrugsForUpdate(drugs);
-        
-        if (drugs.size() > ASYNC_THRESHOLD) {
-            return asyncProcessor.processBulkUpdate(drugs);
-        }
-        
         return drugRepository.saveAll(drugs);
     }
 
@@ -91,12 +74,7 @@ public class DrugService {
     @Transactional
     public void deleteBulkDrugs(List<UUID> ids) {
         validateBulkDrugsForDeletion(ids);
-        
-        if (ids.size() > ASYNC_THRESHOLD) {
-            asyncProcessor.processBulkDeletion(ids);
-        } else {
-            drugRepository.deleteAllById(ids);
-        }
+        drugRepository.deleteAllById(ids);
     }
 
     // Search methods with pagination

@@ -207,7 +207,7 @@ For DELETE /bulk:
 ## Future Enhancements
 1. Transition to MySQL for production environments
 2. Dockerization of the application for portability and scalability
-3. Asynchronous processing for bulk requests to improve performance
+3. Paralel processing system (such as Spring Batch) for bulk requests to improve performance
 4. Advanced caching mechanisms for frequent queries
 5. Additional fields such as expiration date and dosage form in the Drug entity
 6. Creation of a separate Manufacturer entity for detailed manufacturer information
@@ -228,5 +228,6 @@ For DELETE /bulk:
 - ChatGPT recommended custom exceptions (DrugNotFoundException, etc.) and standardized error response structures
 
 ### Challenges Encountered
-- File rearrangements during Swagger integration disrupted functionality but were resolved through iterative updates with AI tools
-- Initial dependency conflicts required manual intervention before AI recommendations proved effective
+- File rearrangements during Swagger integration disrupted functionality but were resolved through iterative updates with AI tools.
+- Initial dependency conflicts required manual intervention before AI recommendations proved effective.
+- I attempted to implement parallel/asynchronous processing using CursorAI. However, the features were not truly asynchronous, as each iteration remained blocking. The complexity of achieving true asynchronous behavior was beyond the necessary scope of the project, so I decided not to pursue it further.
