@@ -1,4 +1,4 @@
-# SureCost Drug Management Service Documentation
+# Rx Managment Backend Documentation
 
 ## Table of Contents
 - [Project Overview](#project-overview)
@@ -12,10 +12,10 @@
 - [AI Tool Usage](#ai-tool-usage)
 
 ## Project Overview
-The SureCost Drug Management Service is a Java-based REST API designed for managing drug information. It supports CRUD operations, bulk data processing, and advanced search capabilities while ensuring scalability and efficient data handling.
+The Rx Management Service is a Java-based REST API designed for managing drug information. It supports CRUD operations, bulk data processing, and advanced search capabilities while ensuring scalability and efficient data handling.
 
 ## Project Planning and Brainstorming
-The initial planning phase of the SureCost Drug Management Service utilized collaborative tools to establish a clear project direction and maintain organized documentation.
+The initial planning phase of the Rx Management Service utilized collaborative tools to establish a clear project direction and maintain organized documentation.
 
 ### Mural Collaboration
 - **To-Do List Creation**: Developed a comprehensive task breakdown using Mural's digital whiteboard

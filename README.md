@@ -1,4 +1,4 @@
-# SureCost Take Home Project
+# Rx Managment Backend
 
 A Java-powered REST API service built on Spring Boot, designed for comprehensive drug information management. This application excels in performing CRUD operations, optimizing data handling processes, and providing robust search capabilities for pharmaceutical data.
 
@@ -24,12 +24,12 @@ A Java-powered REST API service built on Spring Boot, designed for comprehensive
 
 1. Clone the repository
 ```bash
-git clone https://github.com/JoeySouzaAO1/SureCostTakeHome.git
+git clone https://github.com/JoeySouzaAO1/Rx-Managment-Backend.git
 ```
 
 2. Navigate to the project directory
 ```bash
-cd SureCostTakeHome
+cd Rx-Managment-Backend
 ```
 
 3. Build the project
